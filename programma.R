@@ -3,17 +3,15 @@ library(tidyr)
 library(ggplot2)
 
 #1
-
 kordat <- read.table("variants2.txt", header = TRUE, sep = "\t", dec = ",", strip.white = TRUE, row.names = 1)
 #head(kordat)
 #print(kordat)
-#2
 
+#2
 cols_to_factor <- names(kordat)[9:ncol(kordat)]
 kordat[cols_to_factor] <- lapply(kordat[cols_to_factor], factor)
 
 #3
-
 sink("results.txt")
 
 #4
@@ -37,6 +35,7 @@ cat("\nStandartnovirze pa f faktoriem:\n")
 print(std_dev_by_f)
 
 #summary(kordat$adj.r.squared) 
+
 #8
 prockordat <- kordat %>% filter(adj.r.squared > 0.7)
 
@@ -50,14 +49,13 @@ print(prockordat)
 sink()
 
 #print(names(kordat))
-#11
 
+#11
 p <- ggplot(kordat, aes(x = MAD, y = Average)) +
   geom_point() +
   ggtitle("Izkliedes grafiks: MAD vs Average")
 
 ggsave("scatter.svg", plot = p)
-
 
 #12
 p_box <- ggplot(kordat, aes(x = f, y = Intercept, fill = f)) +
@@ -67,7 +65,7 @@ p_box <- ggplot(kordat, aes(x = f, y = Intercept, fill = f)) +
 ggsave("boxplot.svg", plot = p_box)
 
 #papilduzzd
-
 most_frequent_level <- names(which.max(table(unlist(kordat[, cols_to_factor]))))
 filtered_rows <- prockordat[grep(most_frequent_level, rownames(prockordat)), ]
+
 print(filtered_rows)
